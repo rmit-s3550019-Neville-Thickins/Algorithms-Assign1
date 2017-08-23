@@ -4,12 +4,11 @@ import java.util.*;
 public class LinkedListMultiset<T> extends Multiset<T>
 {
 	protected Node msHead;
-	
 	protected int msLength;
 	
 	public LinkedListMultiset() {
 		msHead = null;
-		msLength =0;
+		msLength = 0;
 	} // end of LinkedListMultiset()
 	
 	
@@ -19,7 +18,9 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		
 		if(msHead == null) { // If list is empty then sets head to null
 			newNode.setNext(null);
+			newNode.setPrev(null);
 		}else {// if not sets next node to current node 
+			msHead.setPrev(newNode);
 			newNode.setNext(msHead);
 		}
 		msHead = newNode; // adds the new node to the front of the linklist
@@ -28,7 +29,6 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	
 	
 	public int search(T item) {
-		// Implement me!
 		Node search = msHead;
 		int found = 0;
 		for(int i = 0; i < msLength;i++) {
@@ -43,7 +43,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	
 	public void removeOne(T item) {
 		Node delete = msHead;
-		Node curr = msHead;
+		//Node curr = msHead;
 		
 		if(msHead==null) {
 			return;
@@ -58,7 +58,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 				return;
 			}else {
 				msHead = delete.getNext();
-				delete = null;
+				msHead.setPrev(null);
 				msLength--;
 				return;
 			}
@@ -66,12 +66,15 @@ public class LinkedListMultiset<T> extends Multiset<T>
 			delete = delete.getNext();
 			while(delete !=null) {
 				if(item.equals(delete.getValue())) {
-					curr.setNext(delete.getNext());
-					delete = null;
+					Node p = delete.getPrev();
+					Node n = delete.getNext();
+					
+					p.setNext(n);
+					if(n != null)
+						n.setPrev(p);
 					msLength--;
 					return;
 				}
-				curr = curr.getNext();
 				delete = delete.getNext();
 			}
 		}
@@ -82,6 +85,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	public void removeAll(T item) {
 		
 		while(search(item) != 0){
+			System.out.println("hi");
 			removeOne(item);
 		}
 	} // end of removeAll()
@@ -106,10 +110,11 @@ public class LinkedListMultiset<T> extends Multiset<T>
         /** Stored value of node. */
         protected T mValue;
         /** Reference to next node. */
-        protected Node mNext;
+        protected Node mNext, mPrev;
 
-        public Node(T value) {
+        public Node(T value ) {
             mValue = value;
+            mPrev = null;
             mNext = null;
         }
 
@@ -122,6 +127,9 @@ public class LinkedListMultiset<T> extends Multiset<T>
             return mNext;
         }
 
+        public Node getPrev() {
+        	return mPrev;
+        }
 
         public void setValue(T value) {
             mValue = value;
@@ -130,6 +138,9 @@ public class LinkedListMultiset<T> extends Multiset<T>
 
         public void setNext(Node next) {
             mNext = next;
+        }
+        public void setPrev(Node prev) {
+            mPrev = prev;
         }
     }
 } // end of class LinkedListMultiset
