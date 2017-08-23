@@ -30,15 +30,15 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	public int search(T item) {
 		// Implement me!
 		Node search = msHead;
+		int found = 0;
 		for(int i = 0; i < msLength;i++) {
 			if(item.equals(search.getValue())) {
-				System.out.println(i);
-				return i;
+				found++;
 			}
 			search = search.getNext();
 		}
 		// very basic search
-		return -1;
+		return found;
 	} // end of search()
 	
 	public void removeOne(T item) {
@@ -49,15 +49,22 @@ public class LinkedListMultiset<T> extends Multiset<T>
 			return;
 		}
 		
+		// checks if the head is the one you want to delete and if the next value is null
+		// then clears everything
 		if(item.equals(delete.getValue())) {
-			if(msHead.getNext() == null) {
+			if(msLength == 1) {
 				msHead= null;
+				msLength =0;
+				return;
+			}else {
+				msHead = delete.getNext();
+				delete = null;
 				msLength--;
 				return;
 			}
 		}else {
 			delete = delete.getNext();
-			for(int i = 0; i < msLength;i++) {
+			while(delete !=null) {
 				if(item.equals(delete.getValue())) {
 					curr.setNext(delete.getNext());
 					delete = null;
@@ -74,29 +81,25 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	
 	public void removeAll(T item) {
 		
-		Node curr = msHead;
-		Node next = null;
-		
-		for(int i = 0; i < msLength;i++) {
-			next = curr.getNext();
-			curr.setNext(null);
-			curr = next;
-			msLength--;
+		while(search(item) != 0){
+			removeOne(item);
 		}
-		msHead = null;
-
 	} // end of removeAll()
 	
 	
 	public void print(PrintStream out) {
 		Node print = msHead;
-		if(print != null) {
-			for(int i = 0; i < msLength;i++) {
-				out.println(print.getValue());
-				print = print.getNext();
+		
+		LinkedListMultiset<T> PL = new LinkedListMultiset<T>();
+		
+		while (print != null) {
+			if(PL.search((T)print.getValue())==0) {
+				PL.add(print.getValue());
+				out.print(print.getValue().toString()+" | "+Integer.toString(search(print.getValue()))+"\n");
 			}
+			print = print.getNext();
 		}
-	} // end of print()
+	}
 	
 	private class Node
     {
