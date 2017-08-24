@@ -85,7 +85,6 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	public void removeAll(T item) {
 		
 		while(search(item) != 0){
-			System.out.println("hi");
 			removeOne(item);
 		}
 	} // end of removeAll()
@@ -105,7 +104,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		}
 	}
 	
-	private class Node
+	protected class Node
     {
         /** Stored value of node. */
         protected T mValue;
