@@ -49,12 +49,15 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 	
 	public int search(T item) {
 		Node search = msHead;
-
-		for(int i = 0; i < msLength;i++) {
-			if(item.equals(search.getValue())) {
-				return search.getCount();
+		try {
+			for(int i = 0; i < msLength;i++) {
+				if(item.equals(search.getValue())) {
+					return search.getCount();
+				}
+				search = search.getNext();
 			}
-			search = search.getNext();
+		}catch(Exception e) {
+
 		}
 		// very basic search
 		return 0;
@@ -97,8 +100,9 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 						if(delete.getCount() ==1) {
 						Node p = delete.getPrev();
 						Node n = delete.getNext();
-						
-						p.setNext(n);
+						if(p != null) {
+							p.setNext(n);
+						}
 						if(n != null)
 							n.setPrev(p);
 						msLength--;
@@ -125,10 +129,13 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 	
 	public void print(PrintStream out) {
 		Node print = msHead;
-		
-		for(int i =0; i < msLength; i++) {
-			out.print(print.getValue().toString()+" | "+print.getCount()+"\n");
-			print = print.getNext();
+		try {
+			for(int i =0; i < msLength; i++) {
+				out.print(print.getValue().toString()+" | "+print.getCount()+"\n");
+				print = print.getNext();
+			}
+		}catch(Exception e) {
+			
 		}
 	}
 	
